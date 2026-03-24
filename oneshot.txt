@@ -1,0 +1,311 @@
+Voce e o Codex trabalhando neste repositorio. Sua tarefa e reconstruir ou ajustar o projeto inteiro para bater com o estado atual real deste workspace, cobrindo funcionalidade, aparencia, estrutura de arquivos, assets, HTMLs gerados e scripts auxiliares. Execute o trabalho ponta a ponta sem depender de novas decisoes minhas.
+
+Objetivo principal
+
+- Recriar fielmente o projeto web atual `vibi-fight-singleplayer`.
+- Entregar o estado atual do produto, nao a visao futura dos docs.
+- Preservar tanto o comportamento quanto a linguagem visual atual.
+- Tratar este repo como a fonte de verdade primaria.
+
+Regra mais importante de prioridade
+
+1. O codigo atual do repo vence.
+2. Os HTMLs ja gerados e com patch tambem fazem parte do produto atual e precisam continuar corretos.
+3. Scripts de pos-processamento e runtime patch fazem parte do sistema atual e nao devem ser ignorados.
+4. Os docs servem para contexto e nomenclatura.
+5. Se um doc antigo conflitar com o codigo atual, preserve o codigo atual.
+6. Nao implemente a "visao futura" so porque ela esta descrita em TODOs. Entregue o que o projeto realmente e hoje.
+
+Antes de editar, leia estes arquivos obrigatoriamente
+
+- `src/main.bend`
+- `src/play/main.bend`
+- `src/game_test/main.bend`
+- `src/game-test/main.bend`
+- `src/fight/main.bend`
+- `src/story/main.bend`
+- `src/shared/fight/_.bend`
+- `fight/index.html`
+- `city-duel/index.html`
+- `game-test/index.html`
+- `story/index.html`
+- `scripts/postprocess_fight_html.py`
+- `scripts/postprocess_game_test_html.py`
+- `scripts/postprocess_city_duel_html.py`
+- `scripts/postprocess_story_html.py`
+- `scripts/patch_turn_runtime.py`
+- `scripts/generate_skill_svgs.py`
+- `scripts/generate_skill_ai_consts.py`
+- `scripts/build_skill_artifacts.sh`
+- `docs/game/fight.txt`
+- `docs/game/ia.txt`
+- `docs/baixo-do-mapa-referencia.txt`
+- `docs/bend-visual-todo.txt`
+- `docs/mar17.txt`
+
+Stack e arquitetura obrigatorias
+
+- O app continua sendo um projeto web em Bend com HTMLs gerados e commitados.
+- O catalogo compartilhado de skills fica centralizado em `src/shared/fight/_.bend`.
+- As paginas publicas continuam separadas:
+  - `/` menu principal
+  - `/play/` lobby casual
+  - `/fight/` combate direto
+  - `/city-duel/` combate de campanha
+  - `/story/` cidade e telas de campanha
+  - `/game-test/` sandbox tecnico com query params
+- Nao troque a base para outro framework.
+- Nao simplifique o projeto para uma pagina unica se isso apagar o fluxo atual.
+
+Direcao de implementacao
+
+- Use o codigo atual como molde do que precisa existir.
+- Pode refatorar internamente se isso ajudar, mas o resultado final precisa manter o comportamento e a aparencia atual.
+- Nao espalhe metadata de skill por muitos lugares se der para centralizar melhor, mas sem mudar o resultado.
+- Preserve os scripts auxiliares que geram assets e que patcham os bundles finais. Em especial, mantenha um fluxo externo para gerar previews SVG a partir das shapes das skills, no estilo de `scripts/generate_skill_svgs.py`, em vez de desenhar cada SVG manualmente.
+- Se tocar nos HTMLs gerados, mantenha-os consistentes com os sources e com os scripts de pos-processamento.
+
+Escopo do produto atual que voce precisa preservar
+
+1. Menu principal em `/`
+
+- Pagina simples, centralizada, com visual parchment/quente.
+- Eyebrow `Vibi Fight`.
+- Titulo `Escolha como entrar`.
+- Copy explicando campanha e area de testes.
+- Dois links:
+  - `Campanha` levando para `./story/`
+  - `Area de testes` levando para `./play/`
+- O visual do menu atual usa fundo marrom/bege, card central, tipografia bold e botoes arredondados.
+
+2. Lobby casual em `/play/`
+
+- Esta pagina e a porta de entrada da luta casual.
+- Header com eyebrow `Play`, titulo `Lobby da luta` e botao `Voltar`.
+- Estrutura principal em duas colunas lado a lado no desktop:
+  - card do player
+  - card do bot inimigo
+- Cada lado mostra:
+  - slots equipados
+  - lista visual de skills disponiveis
+  - filtros `All`, `Ranged`, `Mage`, `Melee`
+- Os cards de skill devem usar SVGs gerados a partir das shapes do catalogo, salvos em `assets/skills/<SkillName>.svg`, usando um script externo no estilo de `scripts/generate_skill_svgs.py`.
+- O lobby tem footer com copy explicativo e CTA `Play`.
+- O botao `Play` gera link para `../fight/` com query params `ps1/ps2/ps3/bs1/bs2/bs3`.
+- Preserve o estado atual do repo, inclusive detalhes e inconsistencias existentes entre copy e comportamento, se houver.
+- O layout atual usa:
+  - card grande central
+  - grid de duas colunas no desktop
+  - uma coluna no mobile
+  - scroll interno onde necessario, evitando scroll global desnecessario
+
+3. Combate direto em `/fight/` e `/city-duel/`
+
+- O combate base atual precisa continuar funcional e visualmente igual.
+- Tabuleiro:
+  - grid 18 x 9
+  - player inicia em `(6,4)`
+  - inimigo inicial em `(11,4)`
+  - player azul
+  - bot verde em quadrado/retangulo com HP escrito no proprio tile
+- Regras base atuais:
+  - HP padrao 50
+  - dano padrao 10 para skills ofensivas que causam dano
+  - round com 3 slots
+  - no maximo 2 moves ortogonais e 1 ataque
+  - sem movimento diagonal
+  - depois de atacar, nao pode mais mover naquele round
+  - resolucao slot a slot
+  - player age antes do bot no mesmo slot
+  - move bloqueado nao entra no tile ocupado
+  - bloqueio precisa ter feedback visual de bump/boing
+- HUD atual do combate:
+  - embaixo do board existe uma barra horizontal unica
+  - ordem da faixa:
+    - card de `Player HP`
+    - 3 slots da fila do round
+    - 3 previews das skills equipadas
+  - na lateral direita existe sidebar com:
+    - Round
+    - Estado
+    - texto de bots vivos
+    - acoes (`Ready`, `Reset partida`, `Voltar lobby`)
+    - bloco de controles
+- Elementos visuais atuais que precisam continuar:
+  - ghost de posicao planejada
+  - trail com numeracao dos passos
+  - preview de tiles da skill
+  - preview de encaixe/anchor
+  - preview invalido
+  - flash de ataque
+  - bump curto do ator quando o move falha
+  - modal de vitoria/derrota
+
+4. Controles do combate
+
+- Preserve o esquema atual de controles e os textos tutorial/ajuda atuais.
+- O estado atual do produto comunica e usa:
+  - `1 / 2 / 3` para selecionar skill equipada
+  - `WASD` e setas para mover o personagem ou ajustar a mira
+  - `Q / E` para girar a skill
+  - `Espaco` para concluir acao atual e confirmar skill quando estiver mirando
+  - `Esc` para sair da mira ou desfazer a ultima decisao
+  - `Enter` para resolver o round
+- Preserve tambem o comportamento atual citado pelo proprio bundle:
+  - melee e mage com ate `2 moves + 1 ataque`
+  - ranged com um ajuste extra enquanto a skill esta ativa, se isso ja faz parte do runtime atual
+
+5. IA, planner e regras de skill
+
+- Preserve a IA atual do repo, nao reescreva outra so com base em docs antigos.
+- A implementacao atual deve continuar barata e agressiva.
+- Mantenha a leitura por `deltaX` e `deltaY`, prioridade por classe, escolha de `0/1/2` moves e tentativa do primeiro encaixe valido aceitavel.
+- O funil descrito em `docs/game/ia.txt` e a melhor referencia conceitual quando combinar com o codigo atual.
+- Preserve o sistema de tiles de skill com `P`, `A`, `D`, `H`, `I`, `F`.
+- Preserve o comportamento atual de preview, dano, hook, gelo e fogo conforme implementado hoje.
+- Nao "corrija" nada para bater com um doc se o codigo atual ja estiver operando de outro jeito.
+
+6. Catalogo compartilhado de skills
+
+- O catalogo compartilhado atual possui `34` skills.
+- Preserve nomes, ids, classe, rank, damage e helpers atuais.
+- Os nomes atuais incluem:
+  - `Me1`, `Me2`, `Me3`, `Me4`, `Ma1`, `Ma2`, `Me5`, `Ra1`, `Ma3`, `Ra2`, `Ra3`, `Ra4`, `Ra5`, `Me6`, `Me7`, `Me8`, `Me10`, `Me11`, `Me12`, `Me13`, `Ra6`, `Ra7`, `Ra8`, `Ra9`, `Ra10`, `Ra11`, `Ma4`, `Ma5`, `Ma6`, `Ma7`, `Ma8`, `Ma9`, `Ma10`, `Me0`
+- Use `src/shared/fight/_.bend` como fonte de verdade para o catalogo base.
+- Se as skills ainda nao estiverem definidas no projeto-alvo, crie habilidades no mesmo estilo deste game: mistura de melee, ranged e mage; tiles `P`, `A`, `D`, `H`, `I`, `F`; variedade de formas e alcances; algumas skills utilitarias e outras ofensivas.
+- Em vez de depender de SVGs estaticos prontos como fonte primaria, mantenha um script externo para gerar `assets/skills/<SkillName>.svg` a partir do catalogo de skills, no estilo de `scripts/generate_skill_svgs.py`.
+- Use `scripts/build_skill_artifacts.sh` como referencia de wrapper para regenerar SVGs e outras derivacoes das skills.
+- Padrao de design por classe para skills novas, seguindo o catalogo atual:
+  - Melee: e a classe mais livre e variada, mas hoje quase sempre usa apenas `A` e shapes pequenas ou medias de curto alcance. Os canvases recorrentes sao `2x1`, `3x2`, `3x3`, `4x1`, `4x4`, `5x1` e `7x1`. As familias atuais incluem linha reta, diagonal simples, cruz/losango, `L`, escada diagonal, `T`, coluna dupla e corner sweep. Nao use fogo ou gelo em melee comum. Hook existe como excecao controlada: uma skill e uma linha reta inteira de `H`, e outra e uma linha ancorada `P-H-H-H-DH`. Se criar melee nova, priorize silhueta de impacto corpo a corpo e variacao por forma, nao por status elemental.
+  - Ranged: hoje e a classe mais padronizada do jogo. Todas as skills atuais usam canvas `9x5`, com duas colunas completas de `P` no lado esquerdo, sempre em `x=0` e `x=2`, preenchendo as 5 linhas; a coluna entre elas fica vazia. O lado direito contem apenas `D`, separado por um corredor vazio. Ou seja: o scaffold de ancoragem de ranged praticamente nao muda; o que varia e so o desenho do bloco de dano la na frente. As familias atuais de dano sao: linha vertical, dupla linha vertical, cruz/mais concentrado no centro, seta/diamante, diagonal descendente, blocos horizontais no topo ou embaixo e pares espelhados nos cantos. Nao use `F`, `I` ou `H` em ranged se o objetivo for seguir o padrao atual.
+  - Mage: sempre usa `P` em zigzag ou chevron no lado esquerdo, nunca no formato de duas colunas retas iguais ao ranged. Existem 3 familias reais hoje: zigzag compacto de 3 pontos em `7x3`/`8x3`; zigzag/diagonal alongado de 5 pontos em `7x5`; e uma unica excecao centralizada estilo cruz curta (`Ma3`). O lado direito recebe fogo ou gelo, com vao vazio entre ancora e impacto. Mage atual e uma classe elemental: as skills antigas puras usam so `I` ou `F`, sem dano direto; as variantes mais novas misturam `D` com `I` ou `F` no mesmo tile (`DI` ou `DF`). Nao crie mage com dano neutro puro como se fosse ranged. Se criar mage nova, pense em pares e familias de fogo/gelo, com bursts em leque, diagonal, seta, cruz curta ou bloco elemental.
+  - Regra global de familia: skills novas devem parecer parentes das existentes. Prefira criar variacoes e subfamilias das linguagens acima, em vez de inventar formas sem relacao com o catalogo atual. Preserve tambem a separacao de identidade: melee = silhueta e proximidade; ranged = scaffold fixo de ancora + dano distante; mage = ancora em zigzag + magia elemental na frente.
+- Preserve tambem qualquer extensao/override do runtime patch que hoje complemente metadata das skills nos bundles finais.
+
+7. Pagina `/story/` e campanha atual
+
+- A pagina de story nao e apenas um placeholder estatico.
+- O source Bend define a base visual da cidade, inventario e end screens.
+- O HTML final recebe um patch grande em `scripts/postprocess_story_html.py` e isso faz parte do produto atual.
+- Preserve esse comportamento atual completo:
+  - leitura de query params
+  - telas `city`, `game_over` e `victory`
+  - campanha de 12 levels
+  - calculo de bot loadout, bot HP, reward e armor por level
+  - levels gate em `4`, `8` e `12`
+  - gold persistido via query string
+  - inventario de skills compradas
+  - loadout equipavel com 3 slots
+  - armaduras `ab`, `al`, `ac`, `ah`
+  - total de HP do player derivado de armadura
+  - CTA `Duel` ou `Rodada eliminatoria` conforme o level
+  - 3 lojas abertas na cidade:
+    - Wizard's Tower
+    - The Bowyer's Workshop
+    - The Blacksmith's Forge
+  - compra de skills
+  - compra de armaduras
+  - modal de compra/equip
+  - warning modal quando nao houver gold ou slot
+  - ability de equipar skill do inventario
+  - ability de desequipar skill
+  - URL sincronizada com o estado atual da campanha
+- Preserve a organizacao visual da cidade:
+  - backdrop com `assets/background/background-para-substituir.png`
+  - 4 quadrantes
+  - linhas cruzando a cidade
+  - inventario como painel sobreposto
+  - botoes/lojas com visual de painel marrom dourado
+
+8. Pos-processamento e bundles publicos
+
+- Os bundles finais atuais nao sao apenas a saida bruta do Bend.
+- Preservar e manter corretos:
+  - `scripts/postprocess_fight_html.py`
+  - `scripts/postprocess_game_test_html.py`
+  - `scripts/postprocess_city_duel_html.py`
+  - `scripts/postprocess_story_html.py`
+  - `scripts/patch_turn_runtime.py`
+- `fight/index.html` precisa continuar aceitando `ps1/ps2/ps3/bs1/bs2/bs3`.
+- `game-test/index.html` precisa continuar aceitando skills e items via query params.
+- `city-duel/index.html` e um espelho operacional do combate para a campanha.
+- O runtime patch atual tambem injeta comportamento de campanha nos bundles de combate:
+  - leitura de `campaign=1`
+  - leitura de `level`, `gold`, `reward`, `php`, `bhp`
+  - loadouts vindos da campanha
+  - modal/resultados com link de volta para story
+- Preserve esse fluxo.
+
+9. Direcao visual obrigatoria
+
+- Nao redesenhe o projeto em uma linguagem visual generica.
+- Preserve a identidade atual:
+  - paleta quente, terrosa, parchment, madeira e dourado
+  - cards claros sobre fundo bege/marrom
+  - bordas marrons visiveis
+  - botoes arredondados fortes
+  - tipografia bold com `Trebuchet MS` / `Segoe UI` style atual
+  - board com frame marrom escuro
+  - player azul e bot verde
+  - previews coloridos:
+    - preview comum amarelado
+    - anchor azul claro
+    - gelo azul
+    - fogo laranja
+    - invalido vermelho queimado
+- Preserve a responsividade atual:
+  - combate quebra para layout vertical no mobile
+  - lobby cai para uma coluna
+  - story reordena grid e modais para telas menores
+- Evite scroll global quando o layout atual ja usa scroll interno localizado.
+
+10. Coisas que NAO devem virar escopo
+
+- Nao implemente melhorias futuras so porque aparecem em `docs/bend-visual-todo.txt`.
+- Nao tente modernizar para outra stack.
+- Nao remova os HTMLs gerados commitados.
+- Nao simplifique a story para uma pagina sem lojas/modais se hoje o HTML final ja faz isso.
+- Nao reescreva o projeto com outro visual.
+- Nao trate docs antigos como mais importantes que o runtime atual.
+
+Detalhes importantes sobre fidelidade
+
+- Se houver inconsistencias entre texto de UI, docs e comportamento, preserve o estado atual real do repo.
+- Se um detalhe estiver definido no source `.bend` e tambem no HTML patchado, a experiencia publica final e o que manda.
+- Se um comportamento estiver no HTML gerado por patch e nao existir no source Bend puro, ele ainda assim faz parte do produto e precisa continuar.
+
+Entregavel esperado
+
+- O repo deve continuar com todas as paginas publicas atuais funcionando.
+- O visual deve continuar reconhecivelmente igual ao atual.
+- O fluxo casual deve funcionar de lobby para fight.
+- O fluxo de campanha deve funcionar de story para city-duel/fight e de volta para story via resultados.
+- O catalogo de skills e assets deve continuar consistente.
+- Os scripts auxiliares devem continuar corretos.
+
+Checklist de aceitacao obrigatorio
+
+- `/` abre menu com os dois CTAs corretos.
+- `/play/` renderiza lobby casual completo com filtros e previews.
+- O CTA `Play` do lobby leva para combate com query params validos.
+- `/fight/` renderiza combate direto e respeita os slots recebidos.
+- `/city-duel/` funciona como combate de campanha.
+- `/story/` le estado por query string e abre cidade/end screens corretamente.
+- A story permite abrir lojas, comprar, equipar, desequipar e manter estado na URL.
+- O combate mostra HP do bot dentro do proprio tile.
+- A faixa debaixo do mapa e a sidebar batem com a UI atual.
+- Preview, ghost, trail, hit flash e bump continuam presentes.
+- Responsividade continua funcional em desktop e mobile.
+
+Modo de trabalho
+
+- Nao pare para pedir decisoes que o repo ja responde.
+- Leia primeiro, implemente depois.
+- Faca as mudancas necessarias ate o resultado final bater com o estado atual completo do projeto.
+- Se precisar escolher entre "doc futuro" e "codigo atual", escolha o codigo atual.
+
+Ao terminar
+
+- Verifique os fluxos principais localmente.
+- Confirme que os bundles/publicos e os scripts de patch ficaram coerentes.
+- Resuma o que foi alterado e qualquer detalhe residual relevante.
