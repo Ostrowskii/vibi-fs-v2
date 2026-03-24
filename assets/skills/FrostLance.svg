@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Frost Lance">
+<title>Frost Lance</title>
+<rect x="5" y="13" width="6" height="6" fill="#58d8e8" rx="4" ry="4" />
+<rect x="45" y="13" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+<rect x="13" y="21" width="6" height="6" fill="#58d8e8" rx="4" ry="4" />
+<rect x="45" y="21" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+<rect x="53" y="21" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+<rect x="5" y="29" width="6" height="6" fill="#58d8e8" rx="4" ry="4" />
+<rect x="45" y="29" width="6" height="6" fill="#d94933" rx="4" ry="4" stroke="#70aee4" stroke-width="2" />
+<rect x="53" y="29" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+<rect x="13" y="37" width="6" height="6" fill="#58d8e8" rx="4" ry="4" />
+<rect x="45" y="37" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+<rect x="53" y="37" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+<rect x="5" y="45" width="6" height="6" fill="#58d8e8" rx="4" ry="4" />
+<rect x="45" y="45" width="6" height="6" fill="#70aee4" rx="4" ry="4" />
+</svg>

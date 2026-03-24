@@ -1,0 +1,2 @@
+-- Entrypoint placeholder for the recreated Vibi Fight singleplayer project.
+-- Public pages are committed under /, /play/, /fight/, /city-duel/, /story/ and /game-test/.
