@@ -1,51 +1,39 @@
-Voce e o Codex trabalhando neste repositorio. Sua tarefa e reconstruir ou ajustar o projeto inteiro para bater com o estado atual real deste workspace, cobrindo funcionalidade, aparencia, estrutura de arquivos, assets, HTMLs gerados e scripts auxiliares. Execute o trabalho ponta a ponta sem depender de novas decisoes minhas.
+Voce e o Codex trabalhando neste repositorio. Sua tarefa e recriar do zero o projeto web `vibi-fight-singleplayer`, ponta a ponta, usando apenas este briefing como especificacao principal. O nome do projeto-alvo importa, mas e proibido consultar o projeto original real, forks, diretorios irmaos, HTMLs antigos, bundles antigos, screenshots antigas, docs antigos ou qualquer outra implementacao previa.
 
 Objetivo principal
 
-- Recriar fielmente o projeto web atual `vibi-fight-singleplayer`.
-- Entregar o estado atual do produto, nao a visao futura dos docs.
-- Preservar tanto o comportamento quanto a linguagem visual atual.
-- Tratar este repo como a fonte de verdade primaria.
+- Recriar o repo/produto `vibi-fight-singleplayer` como um projeto novo, construido do zero.
+- Entregar a experiencia descrita neste arquivo, nao uma versao simplificada.
+- Reproduzir a logica, os fluxos e a linguagem visual descritos aqui sem depender de consulta direta ao projeto real.
+- Tratar este arquivo como a fonte de verdade primaria.
+
+Materiais permitidos como apoio
+
+- Este arquivo `buildfight/oneshot.txt`.
+- A imagem `buildfight/assets/background/background-para-substituir.png`.
+- O script `buildfight/scripts/generate_skill_svgs.py` como referencia de como gerar previews SVG a partir do catalogo de skills.
+- O script `buildfight/scripts/patch_turn_runtime.py` como referencia de como aplicar runtime patch quando isso ajudar a fechar o comportamento final.
 
 Regra mais importante de prioridade
 
-1. O codigo atual do repo vence.
-2. Os HTMLs ja gerados e com patch tambem fazem parte do produto atual e precisam continuar corretos.
-3. Scripts de pos-processamento e runtime patch fazem parte do sistema atual e nao devem ser ignorados.
-4. Os docs servem para contexto e nomenclatura.
-5. Se um doc antigo conflitar com o codigo atual, preserve o codigo atual.
-6. Nao implemente a "visao futura" so porque ela esta descrita em TODOs. Entregue o que o projeto realmente e hoje.
+1. Este prompt vence.
+2. A imagem de background define a atmosfera visual da cidade.
+3. Os dois scripts permitidos servem apenas como referencia tecnica de abordagem, nao como prova de uma implementacao existente.
+4. E proibido consultar o projeto original real, qualquer fork dele, qualquer bundle pronto ou qualquer diretorio fora de `buildfight/` como fonte de verdade.
+5. E proibido tratar codigo preexistente deste workspace fora de `buildfight/` como origem escondida.
+6. Nao implemente "visoes futuras" inventadas. Entregue o produto descrito neste briefing.
 
-Antes de editar, leia estes arquivos obrigatoriamente
+Politica de consulta e reproducao
 
-- `src/main.bend`
-- `src/play/main.bend`
-- `src/game_test/main.bend`
-- `src/game-test/main.bend`
-- `src/fight/main.bend`
-- `src/story/main.bend`
-- `src/shared/fight/_.bend`
-- `fight/index.html`
-- `city-duel/index.html`
-- `game-test/index.html`
-- `story/index.html`
-- `scripts/postprocess_fight_html.py`
-- `scripts/postprocess_game_test_html.py`
-- `scripts/postprocess_city_duel_html.py`
-- `scripts/postprocess_story_html.py`
-- `scripts/patch_turn_runtime.py`
-- `scripts/generate_skill_svgs.py`
-- `scripts/generate_skill_ai_consts.py`
-- `scripts/build_skill_artifacts.sh`
-- `docs/game/fight.txt`
-- `docs/game/ia.txt`
-- `docs/baixo-do-mapa-referencia.txt`
-- `docs/bend-visual-todo.txt`
-- `docs/mar17.txt`
+- O alvo e reproduzir o repo/produto `vibi-fight-singleplayer`, mas sem consultar o repo real.
+- Tudo o que for necessario de regras, logica, UI, fluxo e direcao visual deve estar representado neste prompt.
+- Se em algum momento surgir a tentacao de "checar como era no repo original", nao faca isso.
+- Se existir qualquer artefato externo que pareca relacionado ao projeto-alvo, ignore.
+- Se um detalhe nao estiver literalmente descrito, escolha a interpretacao mais conservadora e mais coerente com o restante deste briefing.
 
-Stack e arquitetura obrigatorias
+Estrutura alvo do projeto
 
-- O app continua sendo um projeto web em Bend com HTMLs gerados e commitados.
+- O app final continua sendo um projeto web em Bend com HTMLs publicos gerados e commitados.
 - O catalogo compartilhado de skills fica centralizado em `src/shared/fight/_.bend`.
 - As paginas publicas continuam separadas:
   - `/` menu principal
@@ -55,17 +43,18 @@ Stack e arquitetura obrigatorias
   - `/story/` cidade e telas de campanha
   - `/game-test/` sandbox tecnico com query params
 - Nao troque a base para outro framework.
-- Nao simplifique o projeto para uma pagina unica se isso apagar o fluxo atual.
+- Nao simplifique o projeto para uma pagina unica se isso apagar o fluxo pedido.
 
 Direcao de implementacao
 
-- Use o codigo atual como molde do que precisa existir.
-- Pode refatorar internamente se isso ajudar, mas o resultado final precisa manter o comportamento e a aparencia atual.
-- Nao espalhe metadata de skill por muitos lugares se der para centralizar melhor, mas sem mudar o resultado.
-- Preserve os scripts auxiliares que geram assets e que patcham os bundles finais. Em especial, mantenha um fluxo externo para gerar previews SVG a partir das shapes das skills, no estilo de `scripts/generate_skill_svgs.py`, em vez de desenhar cada SVG manualmente.
-- Se tocar nos HTMLs gerados, mantenha-os consistentes com os sources e com os scripts de pos-processamento.
+- Construa o projeto do zero com base nos comportamentos e interfaces descritos abaixo.
+- Pode organizar internamente as fontes como quiser, desde que a experiencia publica final bata com este briefing.
+- Centralize metadados de skill no catalogo compartilhado sempre que isso fizer sentido.
+- Use um fluxo externo para gerar `assets/skills/<SkillName>.svg` a partir do catalogo de skills, inspirado no estilo de `buildfight/scripts/generate_skill_svgs.py`, em vez de desenhar manualmente cada preview.
+- Runtime patch e permitido se ajudar a fechar o produto final. Se usar isso, mantenha a relacao entre source e bundle publico explicita e coerente.
+- Se tocar nos HTMLs gerados, mantenha os bundles finais coerentes com os sources e com qualquer patch aplicado.
 
-Escopo do produto atual que voce precisa preservar
+Escopo do produto que voce precisa entregar
 
 1. Menu principal em `/`
 
@@ -76,7 +65,7 @@ Escopo do produto atual que voce precisa preservar
 - Dois links:
   - `Campanha` levando para `./story/`
   - `Area de testes` levando para `./play/`
-- O visual do menu atual usa fundo marrom/bege, card central, tipografia bold e botoes arredondados.
+- O visual do menu usa fundo marrom/bege, card central, tipografia bold e botoes arredondados.
 
 2. Lobby casual em `/play/`
 
@@ -89,11 +78,10 @@ Escopo do produto atual que voce precisa preservar
   - slots equipados
   - lista visual de skills disponiveis
   - filtros `All`, `Ranged`, `Mage`, `Melee`
-- Os cards de skill devem usar SVGs gerados a partir das shapes do catalogo, salvos em `assets/skills/<SkillName>.svg`, usando um script externo no estilo de `scripts/generate_skill_svgs.py`.
+- Os cards de skill usam SVGs gerados a partir das shapes do catalogo, salvos em `assets/skills/<SkillName>.svg`, por um script externo no estilo de `generate_skill_svgs.py`.
 - O lobby tem footer com copy explicativo e CTA `Play`.
 - O botao `Play` gera link para `../fight/` com query params `ps1/ps2/ps3/bs1/bs2/bs3`.
-- Preserve o estado atual do repo, inclusive detalhes e inconsistencias existentes entre copy e comportamento, se houver.
-- O layout atual usa:
+- O layout usa:
   - card grande central
   - grid de duas colunas no desktop
   - uma coluna no mobile
@@ -101,14 +89,14 @@ Escopo do produto atual que voce precisa preservar
 
 3. Combate direto em `/fight/` e `/city-duel/`
 
-- O combate base atual precisa continuar funcional e visualmente igual.
+- O combate base precisa ser funcional e visualmente consistente com a identidade descrita aqui.
 - Tabuleiro:
   - grid 18 x 9
   - player inicia em `(6,4)`
   - inimigo inicial em `(11,4)`
   - player azul
   - bot verde em quadrado/retangulo com HP escrito no proprio tile
-- Regras base atuais:
+- Regras base:
   - HP padrao 50
   - dano padrao 10 para skills ofensivas que causam dano
   - round com 3 slots
@@ -119,7 +107,7 @@ Escopo do produto atual que voce precisa preservar
   - player age antes do bot no mesmo slot
   - move bloqueado nao entra no tile ocupado
   - bloqueio precisa ter feedback visual de bump/boing
-- HUD atual do combate:
+- HUD do combate:
   - embaixo do board existe uma barra horizontal unica
   - ordem da faixa:
     - card de `Player HP`
@@ -129,9 +117,9 @@ Escopo do produto atual que voce precisa preservar
     - Round
     - Estado
     - texto de bots vivos
-    - acoes (`Ready`, `Reset partida`, `Voltar lobby`)
+    - acoes `Ready`, `Reset partida`, `Voltar lobby`
     - bloco de controles
-- Elementos visuais atuais que precisam continuar:
+- Elementos visuais que precisam existir:
   - ghost de posicao planejada
   - trail com numeracao dos passos
   - preview de tiles da skill
@@ -143,51 +131,121 @@ Escopo do produto atual que voce precisa preservar
 
 4. Controles do combate
 
-- Preserve o esquema atual de controles e os textos tutorial/ajuda atuais.
-- O estado atual do produto comunica e usa:
+- O esquema de controles e os textos tutorial/ajuda precisam comunicar e suportar:
   - `1 / 2 / 3` para selecionar skill equipada
   - `WASD` e setas para mover o personagem ou ajustar a mira
   - `Q / E` para girar a skill
-  - `Espaco` para concluir acao atual e confirmar skill quando estiver mirando
+  - `Espaco` para concluir a acao atual e confirmar skill quando estiver mirando
   - `Esc` para sair da mira ou desfazer a ultima decisao
   - `Enter` para resolver o round
-- Preserve tambem o comportamento atual citado pelo proprio bundle:
+- O comportamento esperado por classe e:
   - melee e mage com ate `2 moves + 1 ataque`
-  - ranged com um ajuste extra enquanto a skill esta ativa, se isso ja faz parte do runtime atual
+  - ranged com um ajuste extra enquanto a skill estiver ativa
 
-5. IA, planner e regras de skill
+5. IA, planner e regras de combate
 
-- Preserve a IA atual do repo, nao reescreva outra so com base em docs antigos.
-- A implementacao atual deve continuar barata e agressiva.
-- Mantenha a leitura por `deltaX` e `deltaY`, prioridade por classe, escolha de `0/1/2` moves e tentativa do primeiro encaixe valido aceitavel.
-- O funil descrito em `docs/game/ia.txt` e a melhor referencia conceitual quando combinar com o codigo atual.
-- Preserve o sistema de tiles de skill com `P`, `A`, `D`, `H`, `I`, `F`.
-- Preserve o comportamento atual de preview, dano, hook, gelo e fogo conforme implementado hoje.
-- Nao "corrija" nada para bater com um doc se o codigo atual ja estiver operando de outro jeito.
+- A IA deve ser barata e agressiva.
+- O bot sempre tenta atacar no turno.
+- O move existe para viabilizar o ataque, nao para abrir uma fase separada de reposicionamento sem objetivo.
+- Dentro de cada slot, a ordem de resolucao e:
+  - player
+  - bot 1
+  - bot 2
+  - bot 3
+  - etc
+- Para decidir o turno, a IA calcula:
+  - `deltaX = xBot - xPlayer`
+  - `deltaY = yBot - yPlayer`
+- A direcao dominante e escolhida assim:
+  - diagonal se `abs(abs(deltaX) - abs(deltaY)) <= 2`
+  - horizontal se `abs(deltaX)` for maior
+  - vertical se `abs(deltaY)` for maior
+- Prioridade de classe por HP:
+  - se `bot_hp >= player_hp`: `melee > mage > ranged`
+  - se `bot_hp < player_hp`: `ranged > mage > melee`
+- A IA avalia opcoes de `0`, `1` ou `2` moves antes do ataque.
+- A escolha do move candidato usa o menor numero de moves que ja coloca o bot na faixa ideal da classe; se nenhum colocar na faixa ideal, usa o que mais aproxima.
+- Faixa ideal por classe:
+  - melee: aproximar para atacar
+  - mage: tentar ficar a `6` ou `7` blocos do player na horizontal; se horizontal nao for viavel, usar vertical
+  - ranged: tentar ficar a `8`, `9` ou `10` blocos do player na horizontal; se horizontal nao for viavel, usar vertical
+- Regras adicionais de eixo:
+  - horizontal e a preferencia principal para `mage` e `ranged`
+  - quando horizontal nao for viavel, a IA muda para vertical
+  - quando horizontal voltar a ser viavel, a IA pode retornar para horizontal
+  - se o bot encurralar na parede, ele pode inverter o lado e recomecar a busca no sentido oposto
+- Regra especial de ranged:
+  - se o ranged ja estiver na distancia horizontal ideal, ele nao deve aproximar nem afastar
+  - nessa situacao, ele deve se mover em paralelo ao player
+  - se houver dois moves paralelos validos, a escolha entre eles e aleatoria
+- Depois do move candidato, a IA aplica um filtro barato de area util da skill para decidir se vale considerar a skill.
+- Se nenhuma skill passar no filtro de area util, a IA tenta a skill de maior alcance da classe prioritaria.
+- Tentativa final de ataque:
+  - melee ataca na direcao do alvo usando o primeiro encaixe valido que aparecer
+  - mage e ranged usam a direcao dominante e o sentido previamente calculados
+  - horizontal e vertical nao precisam tentar variacoes sofisticadas de `P`
+  - diagonal pode tentar o primeiro `P` valido que funcionar
+  - quando houver varios `P` em diagonal, a ordem de tentativa e a ordem natural da matriz
+- A IA nao precisa achar o melhor ataque possivel. Qualquer ataque valido na direcao certa, com prioridade de classe correta, ja serve.
 
-6. Catalogo compartilhado de skills
+6. Sistema de tiles de skill
 
-- O catalogo compartilhado atual possui `34` skills.
-- Preserve nomes, ids, classe, rank, damage e helpers atuais.
-- Os nomes atuais incluem:
-  - `Me1`, `Me2`, `Me3`, `Me4`, `Ma1`, `Ma2`, `Me5`, `Ra1`, `Ma3`, `Ra2`, `Ra3`, `Ra4`, `Ra5`, `Me6`, `Me7`, `Me8`, `Me10`, `Me11`, `Me12`, `Me13`, `Ra6`, `Ra7`, `Ra8`, `Ra9`, `Ra10`, `Ra11`, `Ma4`, `Ma5`, `Ma6`, `Ma7`, `Ma8`, `Ma9`, `Ma10`, `Me0`
-- Use `src/shared/fight/_.bend` como fonte de verdade para o catalogo base.
-- Se as skills ainda nao estiverem definidas no projeto-alvo, crie habilidades no mesmo estilo deste game: mistura de melee, ranged e mage; tiles `P`, `A`, `D`, `H`, `I`, `F`; variedade de formas e alcances; algumas skills utilitarias e outras ofensivas.
-- Em vez de depender de SVGs estaticos prontos como fonte primaria, mantenha um script externo para gerar `assets/skills/<SkillName>.svg` a partir do catalogo de skills, no estilo de `scripts/generate_skill_svgs.py`.
-- Use `scripts/build_skill_artifacts.sh` como referencia de wrapper para regenerar SVGs e outras derivacoes das skills.
-- Padrao de design por classe para skills novas, seguindo o catalogo atual:
-  - Melee: e a classe mais livre e variada, mas hoje quase sempre usa apenas `A` e shapes pequenas ou medias de curto alcance. Os canvases recorrentes sao `2x1`, `3x2`, `3x3`, `4x1`, `4x4`, `5x1` e `7x1`. As familias atuais incluem linha reta, diagonal simples, cruz/losango, `L`, escada diagonal, `T`, coluna dupla e corner sweep. Nao use fogo ou gelo em melee comum. Hook existe como excecao controlada: uma skill e uma linha reta inteira de `H`, e outra e uma linha ancorada `P-H-H-H-DH`. Se criar melee nova, priorize silhueta de impacto corpo a corpo e variacao por forma, nao por status elemental.
-  - Ranged: hoje e a classe mais padronizada do jogo. Todas as skills atuais usam canvas `9x5`, com duas colunas completas de `P` no lado esquerdo, sempre em `x=0` e `x=2`, preenchendo as 5 linhas; a coluna entre elas fica vazia. O lado direito contem apenas `D`, separado por um corredor vazio. Ou seja: o scaffold de ancoragem de ranged praticamente nao muda; o que varia e so o desenho do bloco de dano la na frente. As familias atuais de dano sao: linha vertical, dupla linha vertical, cruz/mais concentrado no centro, seta/diamante, diagonal descendente, blocos horizontais no topo ou embaixo e pares espelhados nos cantos. Nao use `F`, `I` ou `H` em ranged se o objetivo for seguir o padrao atual.
-  - Mage: sempre usa `P` em zigzag ou chevron no lado esquerdo, nunca no formato de duas colunas retas iguais ao ranged. Existem 3 familias reais hoje: zigzag compacto de 3 pontos em `7x3`/`8x3`; zigzag/diagonal alongado de 5 pontos em `7x5`; e uma unica excecao centralizada estilo cruz curta (`Ma3`). O lado direito recebe fogo ou gelo, com vao vazio entre ancora e impacto. Mage atual e uma classe elemental: as skills antigas puras usam so `I` ou `F`, sem dano direto; as variantes mais novas misturam `D` com `I` ou `F` no mesmo tile (`DI` ou `DF`). Nao crie mage com dano neutro puro como se fosse ranged. Se criar mage nova, pense em pares e familias de fogo/gelo, com bursts em leque, diagonal, seta, cruz curta ou bloco elemental.
-  - Regra global de familia: skills novas devem parecer parentes das existentes. Prefira criar variacoes e subfamilias das linguagens acima, em vez de inventar formas sem relacao com o catalogo atual. Preserve tambem a separacao de identidade: melee = silhueta e proximidade; ranged = scaffold fixo de ancora + dano distante; mage = ancora em zigzag + magia elemental na frente.
-- Preserve tambem qualquer extensao/override do runtime patch que hoje complemente metadata das skills nos bundles finais.
+- A habilidade e um conjunto de tiles locais.
+- Para usar uma habilidade, o player precisa encaixar o proprio ator em pelo menos um tile valido da shape.
+- O tile em que o ator esta encaixado nao afeta o proprio ator.
+- Os outros tiles aplicam os efeitos da habilidade.
+- Modelo de tiles:
+  - `P` = tile de encaixe do player/ator
+  - `A` = dano de skill sem `P`
+  - `D` = dano de skill com `P`
+  - `H` = hook
+  - `I` = ice
+  - `F` = fire
+- Regras:
+  - `P` nao aplica efeito por si so; ele so marca onde o ator pode encaixar para usar a skill
+  - skills com `P` nao usam `A`; usam `D`, `I`, `F` e `H`
+  - `A` e `P` nunca coexistem na mesma skill
+  - `P`, `A` e `D` nao combinam entre si no mesmo tile
+  - `I`, `F` e `H` podem combinar com `P` ou com `A` ou com `D`
+  - em skills de mage e ranged, a area de encaixe do ator pode ficar separada da area onde o ataque cai
+  - se a skill tiver tiles `P`, o ator precisa encaixar em um dos `P`
+  - se a skill nao tiver tiles `P`, como nas melee atuais, o ator pode encaixar em qualquer tile ocupado da shape
+  - uma mesma casa pode ter mais de uma letra
+  - a ordem dos efeitos da casa e definida pela skill
+  - exemplo: `AH` significa aplicar `H` e depois `A`
+  - fogo e gelo nunca coexistem no mesmo tile
+  - `F` substitui `I`
+  - `I` substitui `F`
 
-7. Pagina `/story/` e campanha atual
+7. Catalogo compartilhado de skills
 
-- A pagina de story nao e apenas um placeholder estatico.
-- O source Bend define a base visual da cidade, inventario e end screens.
-- O HTML final recebe um patch grande em `scripts/postprocess_story_html.py` e isso faz parte do produto atual.
-- Preserve esse comportamento atual completo:
+- O catalogo deve ser criado pelo proprio Codex a partir dos padroes descritos neste briefing.
+- Nao copie um catalogo fechado de skills, nao force uma quantidade exata e nao dependa de uma lista pronta de nomes.
+- Use `src/shared/fight/_.bend` como fonte de verdade do catalogo dentro do projeto que sera criado.
+- O catalogo precisa cobrir as familias necessarias para sustentar lobby, combate, campanha, inventario, lojas e IA.
+- Em vez de depender de SVGs estaticos prontos como fonte primaria, mantenha um script externo para gerar `assets/skills/<SkillName>.svg` a partir do catalogo de skills.
+- No minimo, o catalogo precisa incluir exemplos funcionais e visualmente coerentes destes padroes:
+  - mage elemental
+  - ranged padrao com scaffold fixo de ancora e dano distante
+  - melee normal sem `P`
+  - melee com hook puro
+  - melee com `P`, hook e dano no mesmo kit
+- A quantidade final de skills deve ser guiada pela coerencia do jogo e pela necessidade de variedade real, nao por um numero arbitrario.
+- Padrao de design por classe:
+  - Melee: classe mais livre e variada, mas normalmente usando apenas `A` e shapes pequenas ou medias de curto alcance. Os canvases recorrentes sao `2x1`, `3x2`, `3x3`, `4x1`, `4x4`, `5x1` e `7x1`. As familias incluem linha reta, diagonal simples, cruz/losango, `L`, escada diagonal, `T`, coluna dupla e corner sweep. Nao use fogo ou gelo em melee comum. Hook existe como excecao controlada: uma skill e uma linha reta inteira de `H`, e outra e uma linha ancorada `P-H-H-H-DH`.
+  - Ranged: classe mais padronizada do jogo. As skills desta familia usam canvas `9x5`, com duas colunas completas de `P` no lado esquerdo, sempre em `x=0` e `x=2`, preenchendo as 5 linhas; a coluna entre elas fica vazia. O lado direito contem apenas `D`, separado por um corredor vazio. O scaffold de ancoragem praticamente nao muda; o que varia e so o desenho do bloco de dano la na frente. As familias de dano podem incluir linha vertical, dupla linha vertical, cruz concentrada no centro, seta/diamante, diagonal descendente, blocos horizontais no topo ou embaixo e pares espelhados nos cantos. Nao use `F`, `I` ou `H` em ranged.
+  - Mage: sempre usa `P` em zigzag ou chevron no lado esquerdo, nunca no formato de duas colunas retas iguais ao ranged. As familias principais incluem zigzag compacto de 3 pontos em `7x3` ou `8x3`, zigzag ou diagonal alongado de 5 pontos em `7x5`, e uma excecao centralizada estilo cruz curta. O lado direito recebe fogo ou gelo, com vao vazio entre ancora e impacto. Mage e uma classe elemental: skills puras podem usar so `I` ou `F`, enquanto variantes mais agressivas podem misturar `D` com `I` ou `F` no mesmo tile `DI` ou `DF`. Nao crie mage com dano neutro puro como se fosse ranged.
+- Regra global de familia:
+  - skills novas devem parecer parentes entre si
+  - melee = silhueta e proximidade
+  - ranged = scaffold fixo de ancora + dano distante
+  - mage = ancora em zigzag + magia elemental na frente
+
+8. Pagina `/story/` e campanha
+
+- A pagina de story nao e um placeholder estatico.
+- Ela precisa entregar cidade, inventario, lojas e telas finais de campanha.
+- O comportamento publico final da campanha precisa incluir:
   - leitura de query params
   - telas `city`, `game_over` e `victory`
   - campanha de 12 levels
@@ -217,34 +275,28 @@ Escopo do produto atual que voce precisa preservar
   - inventario como painel sobreposto
   - botoes/lojas com visual de painel marrom dourado
 
-8. Pos-processamento e bundles publicos
+9. Bundles publicos e query params
 
-- Os bundles finais atuais nao sao apenas a saida bruta do Bend.
-- Preservar e manter corretos:
-  - `scripts/postprocess_fight_html.py`
-  - `scripts/postprocess_game_test_html.py`
-  - `scripts/postprocess_city_duel_html.py`
-  - `scripts/postprocess_story_html.py`
-  - `scripts/patch_turn_runtime.py`
-- `fight/index.html` precisa continuar aceitando `ps1/ps2/ps3/bs1/bs2/bs3`.
-- `game-test/index.html` precisa continuar aceitando skills e items via query params.
+- Os bundles finais publicos nao precisam ser a saida bruta do Bend, desde que o produto final fique coerente e reproduzivel.
+- `fight/index.html` precisa aceitar `ps1/ps2/ps3/bs1/bs2/bs3`.
+- `game-test/index.html` precisa aceitar skills e items via query params.
 - `city-duel/index.html` e um espelho operacional do combate para a campanha.
-- O runtime patch atual tambem injeta comportamento de campanha nos bundles de combate:
+- Se usar runtime patch para campanha nos bundles de combate, mantenha o fluxo abaixo:
   - leitura de `campaign=1`
   - leitura de `level`, `gold`, `reward`, `php`, `bhp`
   - loadouts vindos da campanha
   - modal/resultados com link de volta para story
-- Preserve esse fluxo.
+- O importante e que o fluxo casual e o fluxo de campanha funcionem do jeito descrito, independentemente de como o patch for estruturado internamente.
 
-9. Direcao visual obrigatoria
+10. Direcao visual obrigatoria
 
 - Nao redesenhe o projeto em uma linguagem visual generica.
-- Preserve a identidade atual:
+- A identidade precisa ser:
   - paleta quente, terrosa, parchment, madeira e dourado
   - cards claros sobre fundo bege/marrom
   - bordas marrons visiveis
   - botoes arredondados fortes
-  - tipografia bold com `Trebuchet MS` / `Segoe UI` style atual
+  - tipografia bold com estilo `Trebuchet MS` / `Segoe UI`
   - board com frame marrom escuro
   - player azul e bot verde
   - previews coloridos:
@@ -253,35 +305,36 @@ Escopo do produto atual que voce precisa preservar
     - gelo azul
     - fogo laranja
     - invalido vermelho queimado
-- Preserve a responsividade atual:
+- Responsividade obrigatoria:
   - combate quebra para layout vertical no mobile
   - lobby cai para uma coluna
   - story reordena grid e modais para telas menores
-- Evite scroll global quando o layout atual ja usa scroll interno localizado.
+- Evite scroll global quando o layout puder usar scroll interno localizado.
 
-10. Coisas que NAO devem virar escopo
+11. Coisas que NAO devem virar escopo
 
-- Nao implemente melhorias futuras so porque aparecem em `docs/bend-visual-todo.txt`.
+- Nao consulte o projeto original real.
+- Nao consulte diretorios irmaos, bundles externos, screenshots antigas ou forks como origem.
+- Nao trate nenhum codigo fora de `buildfight/` como referencia obrigatoria.
 - Nao tente modernizar para outra stack.
-- Nao remova os HTMLs gerados commitados.
-- Nao simplifique a story para uma pagina sem lojas/modais se hoje o HTML final ja faz isso.
+- Nao simplifique a story para uma pagina sem lojas, modais e campanha.
 - Nao reescreva o projeto com outro visual.
-- Nao trate docs antigos como mais importantes que o runtime atual.
+- Nao transforme o produto em uma demo minima so para "fechar o prompt".
 
-Detalhes importantes sobre fidelidade
+Detalhes importantes sobre consistencia
 
-- Se houver inconsistencias entre texto de UI, docs e comportamento, preserve o estado atual real do repo.
-- Se um detalhe estiver definido no source `.bend` e tambem no HTML patchado, a experiencia publica final e o que manda.
-- Se um comportamento estiver no HTML gerado por patch e nao existir no source Bend puro, ele ainda assim faz parte do produto e precisa continuar.
+- Se houver tensao entre conveniencia interna e experiencia publica final, a experiencia publica final descrita aqui vence.
+- Se houver tensao entre uma implementacao simples e um fluxo pedido neste briefing, implemente o fluxo pedido.
+- Se um detalhe nao estiver explicitamente definido, escolha a solucao que melhor combine com o resto da UX, com a identidade visual quente/terrosa e com o jogo tatico single-player descrito aqui.
 
 Entregavel esperado
 
-- O repo deve continuar com todas as paginas publicas atuais funcionando.
-- O visual deve continuar reconhecivelmente igual ao atual.
-- O fluxo casual deve funcionar de lobby para fight.
-- O fluxo de campanha deve funcionar de story para city-duel/fight e de volta para story via resultados.
-- O catalogo de skills e assets deve continuar consistente.
-- Os scripts auxiliares devem continuar corretos.
+- O repo final precisa conter todas as paginas publicas funcionando.
+- O visual precisa ser reconhecivelmente o do `vibi-fight-singleplayer` descrito aqui, mesmo sem consultar o projeto original real.
+- O fluxo casual precisa funcionar de lobby para fight.
+- O fluxo de campanha precisa funcionar de story para city-duel/fight e de volta para story via resultados.
+- O catalogo de skills e assets precisa ficar consistente.
+- Os scripts auxiliares do projeto final precisam ficar coerentes com os sources que eles derivam.
 
 Checklist de aceitacao obrigatorio
 
@@ -293,19 +346,19 @@ Checklist de aceitacao obrigatorio
 - `/story/` le estado por query string e abre cidade/end screens corretamente.
 - A story permite abrir lojas, comprar, equipar, desequipar e manter estado na URL.
 - O combate mostra HP do bot dentro do proprio tile.
-- A faixa debaixo do mapa e a sidebar batem com a UI atual.
-- Preview, ghost, trail, hit flash e bump continuam presentes.
-- Responsividade continua funcional em desktop e mobile.
+- A faixa debaixo do mapa e a sidebar batem com a UI pedida.
+- Preview, ghost, trail, hit flash e bump existem.
+- Responsividade funciona em desktop e mobile.
 
 Modo de trabalho
 
-- Nao pare para pedir decisoes que o repo ja responde.
-- Leia primeiro, implemente depois.
-- Faca as mudancas necessarias ate o resultado final bater com o estado atual completo do projeto.
-- Se precisar escolher entre "doc futuro" e "codigo atual", escolha o codigo atual.
+- Nao pare para pedir decisoes que este briefing ja responde.
+- Leia primeiro este prompt, a imagem de background e os dois scripts permitidos. Nao leia o projeto original real.
+- Faca as mudancas necessarias ate o resultado final bater com este briefing completo.
+- Se precisar escolher entre "consultar fora" e "decidir por este prompt", escolha por este prompt.
 
 Ao terminar
 
 - Verifique os fluxos principais localmente.
-- Confirme que os bundles/publicos e os scripts de patch ficaram coerentes.
+- Confirme que os bundles publicos e os scripts auxiliares ficaram coerentes.
 - Resuma o que foi alterado e qualquer detalhe residual relevante.
