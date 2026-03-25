@@ -92,6 +92,7 @@ Escopo do produto que voce precisa entregar
 - O combate base precisa ser funcional e visualmente consistente com a identidade descrita aqui.
 - Tabuleiro:
   - grid 18 x 9
+  - linhas conectadas delimitam claramente cada celula; a arena e um grid continuo, nao blocos soltos
   - player inicia em `(6,4)`
   - inimigo inicial em `(11,4)`
   - player azul
@@ -104,7 +105,10 @@ Escopo do produto que voce precisa entregar
   - sem movimento diagonal
   - depois de atacar, nao pode mais mover naquele round
   - resolucao slot a slot
-  - player age antes do bot no mesmo slot
+  - bots resolvem antes do player em cada slot para reforcar a iniciativa agressiva
+  - efeitos de ataque disparam no momento da resolucao do slot; o impacto do dano sai assim que a acao e confirmada
+  - um dano maior ou igual ao HP restante mata o alvo imediatamente
+  - habilidades podem estender tiles para dentro da area nao visivel da arena, permitindo encaixes precisos nos cantos
   - move bloqueado nao entra no tile ocupado
   - bloqueio precisa ter feedback visual de bump/boing
 - HUD do combate:
@@ -122,9 +126,12 @@ Escopo do produto que voce precisa entregar
 - Elementos visuais que precisam existir:
   - ghost de posicao planejada
   - trail com numeracao dos passos
+  - preview de movimentacao exibido durante o planejamento e limpo imediatamente apos a confirmacao da rodada
   - preview de tiles da skill
   - preview de encaixe/anchor
   - preview invalido
+  - ataque de gelo marcado em azul claro no chao e ataque de fogo marcado em vermelho queimado no chao para comunicar os elementos
+  - marcas elementais expiram no fim da rodada para que cada ataque tenha um turno de visibilidade temporaria
   - flash de ataque
   - bump curto do ator quando o move falha
   - modal de vitoria/derrota
@@ -135,12 +142,12 @@ Escopo do produto que voce precisa entregar
   - `1 / 2 / 3` para selecionar skill equipada
   - `WASD` e setas para mover o personagem ou ajustar a mira
   - `Q / E` para girar a skill
-  - `Espaco` para concluir a acao atual e confirmar skill quando estiver mirando
+  - `Espaco` para concluir a acao atual, confirmar o movimento planejado e encerrar a fase de planejamento
   - `Esc` para sair da mira ou desfazer a ultima decisao
   - `Enter` para resolver o round
 - O comportamento esperado por classe e:
   - melee e mage com ate `2 moves + 1 ataque`
-  - ranged com um ajuste extra enquanto a skill estiver ativa
+  - ranged com um ajuste extra e um move adicional enquanto a skill estiver ativa para alinhar o encaixe
 
 5. IA, planner e regras de combate
 
@@ -148,11 +155,11 @@ Escopo do produto que voce precisa entregar
 - O bot sempre tenta atacar no turno.
 - O move existe para viabilizar o ataque, nao para abrir uma fase separada de reposicionamento sem objetivo.
 - Dentro de cada slot, a ordem de resolucao e:
-  - player
   - bot 1
   - bot 2
   - bot 3
   - etc
+  - player
 - Para decidir o turno, a IA calcula:
   - `deltaX = xBot - xPlayer`
   - `deltaY = yBot - yPlayer`
