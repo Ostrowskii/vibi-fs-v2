@@ -1,0 +1,10 @@
+{
+  "name": "vibi-fs-v2",
+  "entries": {
+    "main": "src/main.bend",
+    "play": "src/play/main.bend",
+    "fight": "src/fight/main.bend",
+    "story": "src/story/main.bend",
+    "game_test": "src/game_test/main.bend"
+  }
+}
