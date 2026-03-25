@@ -1,1 +1,0 @@
--- Fight source placeholder.
